@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-11 12:58:17
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:19:49
+ * @Last Modified time: 2020-06-22 22:42:56
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -11,21 +11,19 @@ const { Cesium } = DC.Namespace
 
 class Corridor extends Overlay {
   constructor(positions) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('Corridor: the positions invalid')
-    }
     super()
     this._positions = Parse.parsePositions(positions)
-    this._delegate = new Cesium.Entity()
+    this._delegate = new Cesium.Entity({ corridor: {} })
     this.type = Overlay.getOverlayType('corridor')
     this._state = State.INITIALIZED
   }
 
   set positions(positions) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('Corridor: the positions invalid')
-    }
     this._positions = Parse.parsePositions(positions)
+    this._delegate.corridor.positions = Transform.transformWGS84ArrayToCartesianArray(
+      this._positions
+    )
+    return this
   }
 
   get positions() {
@@ -34,14 +32,9 @@ class Corridor extends Overlay {
 
   _mountedHook() {
     /**
-     *  initialize the Overlay parameter
+     *  set the location
      */
-    this._delegate.corridor = {
-      ...this._style,
-      positions: new Cesium.CallbackProperty(time => {
-        return Transform.transformWGS84ArrayToCartesianArray(this._positions)
-      })
-    }
+    this.positions = this._positions
   }
 
   /**
@@ -52,8 +45,9 @@ class Corridor extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['positions']
     this._style = style
-    this._delegate.corridor && Util.merge(this._delegate.corridor, this._style)
+    Util.merge(this._delegate.corridor, this._style)
     return this
   }
 }

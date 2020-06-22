@@ -2,31 +2,37 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:24:34
+ * @Last Modified time: 2020-06-22 22:42:31
  */
-const { Overlay, Util, State, Transform } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
 class Ellipse extends Overlay {
   constructor(position, semiMajorAxis, semiMinorAxis) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Ellipse: the position invalid')
-    }
     super()
-    this._position = position
-    this._semiMajorAxis = semiMajorAxis || 0
-    this._semiMinorAxis = semiMinorAxis || 0
-    this._delegate = new Cesium.Entity()
+    this._position = Parse.parsePosition(position)
+    this._semiMajorAxis = +semiMajorAxis || 0
+    this._semiMinorAxis = +semiMinorAxis || 0
+    this._delegate = new Cesium.Entity({ ellipse: {} })
     this.type = Overlay.getOverlayType('ellipse')
     this._state = State.INITIALIZED
   }
 
   set position(position) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Ellipse: the position invalid')
-    }
-    this._position = position
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    this._delegate.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      Transform.transformWGS84ToCartesian(this._position),
+      new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(this._position.heading),
+        Cesium.Math.toRadians(this._position.pitch),
+        Cesium.Math.toRadians(this._position.roll)
+      )
+    )
+    return this
   }
 
   get position() {
@@ -34,7 +40,9 @@ class Ellipse extends Overlay {
   }
 
   set semiMajorAxis(semiMajorAxis) {
-    this._semiMajorAxis = semiMajorAxis
+    this._semiMajorAxis = +semiMajorAxis || 0
+    this._delegate.ellipse.semiMajorAxis = this._semiMajorAxis
+    return this
   }
 
   get semiMajorAxis() {
@@ -42,7 +50,9 @@ class Ellipse extends Overlay {
   }
 
   set semiMinorAxis(semiMinorAxis) {
-    this._semiMinorAxis = semiMinorAxis
+    this._semiMinorAxis = +semiMinorAxis || 0
+    this._delegate.ellipse.semiMinorAxis = this._semiMinorAxis
+    return this
   }
 
   get semiMinorAxis() {
@@ -53,34 +63,12 @@ class Ellipse extends Overlay {
     /**
      * set the location
      */
-    this._delegate.position = new Cesium.CallbackProperty(time => {
-      return Transform.transformWGS84ToCartesian(this._position)
-    })
-    /**
-     * set the orientation
-     */
-    this._delegate.orientation = new Cesium.CallbackProperty(time => {
-      return Cesium.Transforms.headingPitchRollQuaternion(
-        Transform.transformWGS84ToCartesian(this._position),
-        new Cesium.HeadingPitchRoll(
-          Cesium.Math.toRadians(this._position.heading),
-          Cesium.Math.toRadians(this._position.pitch),
-          Cesium.Math.toRadians(this._position.roll)
-        )
-      )
-    })
+    this.position = this._position
     /**
      *  initialize the Overlay parameter
      */
-    this._delegate.ellipse = {
-      ...this._style,
-      semiMajorAxis: new Cesium.CallbackProperty(time => {
-        return this._semiMajorAxis
-      }),
-      semiMinorAxis: new Cesium.CallbackProperty(time => {
-        return this._semiMinorAxis
-      })
-    }
+    this.semiMajorAxis = this._semiMajorAxis
+    this.semiMinorAxis = this._semiMinorAxis
   }
 
   /**
@@ -91,8 +79,9 @@ class Ellipse extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['semiMajorAxis'] && delete style['semiMinorAxis']
     this._style = style
-    this._delegate.ellipse && Util.merge(this._delegate.ellipse, this._style)
+    Util.merge(this._delegate.ellipse, this._style)
     return this
   }
 }

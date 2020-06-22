@@ -2,33 +2,47 @@
  * @Author: Caven
  * @Date: 2020-02-25 18:28:36
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:48:57
+ * @Last Modified time: 2020-06-22 22:53:05
  */
 
-const { Overlay, Util, State, Transform } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
 class Box extends Overlay {
   constructor(position, length, width, height) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Box: the position invalid')
-    }
     super()
-    this._position = position
-    this._length = length
-    this._width = width
-    this._height = height
-    this._delegate = new Cesium.Entity()
+    this._position = Parse.parsePosition(position)
+    this._length = +length || 0
+    this._width = +width || 0
+    this._height = +height || 0
+    this._delegate = new Cesium.Entity({
+      box: {
+        dimensions: {
+          x: this._length,
+          y: this._width,
+          z: this._height
+        }
+      }
+    })
     this.type = Overlay.getOverlayType('box')
     this._state = State.INITIALIZED
   }
 
   set position(position) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Box: the position invalid')
-    }
-    this._position = position
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    this._delegate.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      Transform.transformWGS84ToCartesian(this._position),
+      new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(this._position.heading),
+        Cesium.Math.toRadians(this._position.pitch),
+        Cesium.Math.toRadians(this._position.roll)
+      )
+    )
+    return this
   }
 
   get position() {
@@ -36,7 +50,9 @@ class Box extends Overlay {
   }
 
   set length(length) {
-    this._length = length
+    this._length = +length || 0
+    this._delegate.box.dimensions.x = this._length
+    return this
   }
 
   get length() {
@@ -44,7 +60,9 @@ class Box extends Overlay {
   }
 
   set width(width) {
-    this._width = width
+    this._width = +width || 0
+    this._delegate.box.dimensions.y = this._width
+    return this
   }
 
   get width() {
@@ -52,7 +70,9 @@ class Box extends Overlay {
   }
 
   set height(height) {
-    this._height = height
+    this._height = +height || 0
+    this._delegate.box.dimensions.z = this._height
+    return this
   }
 
   get height() {
@@ -63,31 +83,7 @@ class Box extends Overlay {
     /**
      * set the location
      */
-    this._delegate.position = new Cesium.CallbackProperty(time => {
-      return Transform.transformWGS84ToCartesian(this._position)
-    })
-    /**
-     * set the orientation
-     */
-    this._delegate.orientation = new Cesium.CallbackProperty(time => {
-      return Cesium.Transforms.headingPitchRollQuaternion(
-        Transform.transformWGS84ToCartesian(this._position),
-        new Cesium.HeadingPitchRoll(
-          Cesium.Math.toRadians(this._position.heading),
-          Cesium.Math.toRadians(this._position.pitch),
-          Cesium.Math.toRadians(this._position.roll)
-        )
-      )
-    })
-    /**
-     *  initialize the Overlay parameter
-     */
-    this._delegate.box = {
-      ...this._style,
-      dimensions: new Cesium.CallbackProperty(time => {
-        return new Cesium.Cartesian3(this._length, this._width, this._height)
-      })
-    }
+    this.position = this._position
   }
 
   /**
@@ -98,8 +94,9 @@ class Box extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['length'] && delete style['width'] && delete style['height']
     this._style = style
-    this._delegate.box && Util.merge(this._delegate.box, this._style)
+    Util.merge(this._delegate.box, this._style)
     return this
   }
 }

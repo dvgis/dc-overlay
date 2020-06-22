@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 23:37:38
+ * @Last Modified time: 2020-06-22 23:05:52
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -10,22 +10,20 @@ const { Cesium } = DC.Namespace
 
 class PolylineVolume extends Overlay {
   constructor(positions, shape) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('PolylineVolume: the positions invalid')
-    }
     super()
     this._positions = Parse.parsePositions(positions)
-    this._shape = shape
-    this._delegate = new Cesium.Entity()
+    this._shape = shape || []
+    this._delegate = new Cesium.Entity({ polylineVolume: {} })
     this.type = Overlay.getOverlayType('polyline_volume')
     this._state = State.INITIALIZED
   }
 
   set positions(positions) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('PolylineVolume: the positions invalid')
-    }
     this._positions = Parse.parsePositions(positions)
+    this._delegate.polylineVolume.positions = Transform.transformWGS84ArrayToCartesianArray(
+      this._positions
+    )
+    return this
   }
 
   get positions() {
@@ -33,10 +31,9 @@ class PolylineVolume extends Overlay {
   }
 
   set shape(shape) {
-    if (!shape || !Array.isArray(shape)) {
-      throw new Error('PolylineVolume: the shape invalid')
-    }
-    this._shape = shape
+    this._shape = shape || []
+    this._delegate.polylineVolume.shap = this._shape
+    return this
   }
 
   get shape() {
@@ -45,17 +42,14 @@ class PolylineVolume extends Overlay {
 
   _mountedHook() {
     /**
+     * set the location
+     */
+    this.positions = this._positions
+
+    /**
      *  initialize the Overlay parameter
      */
-    this._delegate.polylineVolume = {
-      ...this._style,
-      positions: new Cesium.CallbackProperty(time => {
-        return Transform.transformWGS84ArrayToCartesianArray(this._positions)
-      }),
-      shape: new Cesium.CallbackProperty(time => {
-        return this._shape
-      })
-    }
+    this.shape = this._shape
   }
 
   /**
@@ -66,9 +60,9 @@ class PolylineVolume extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['positions'] && delete style['shap']
     this._style = style
-    this._delegate.polylineVolume &&
-      Util.merge(this._delegate.polylineVolume, this._style)
+    Util.merge(this._delegate.polylineVolume, this._style)
     return this
   }
 }

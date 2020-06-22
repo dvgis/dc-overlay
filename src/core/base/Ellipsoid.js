@@ -2,30 +2,36 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:27:01
+ * @Last Modified time: 2020-06-22 23:10:12
  */
-const { Overlay, Util, State, Transform } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
 class Ellipsoid extends Overlay {
   constructor(position, radius) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Ellipsoid: the position invalid')
-    }
     super()
-    this._position = position
-    this._radius = radius || 0
+    this._position = Parse.parsePosition(position)
+    this._radius = +radius || 0
     this._delegate = new Cesium.Entity()
     this.type = Overlay.getOverlayType('ellipsoid')
     this._state = State.INITIALIZED
   }
 
   set position(position) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Ellipsoid: the position invalid')
-    }
-    this._position = position
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    this._delegate.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      Transform.transformWGS84ToCartesian(this._position),
+      new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(this._position.heading),
+        Cesium.Math.toRadians(this._position.pitch),
+        Cesium.Math.toRadians(this._position.roll)
+      )
+    )
+    return this
   }
 
   get position() {
@@ -33,7 +39,9 @@ class Ellipsoid extends Overlay {
   }
 
   set radius(radius) {
-    this._radius = radius
+    this._radius = +radius || 0
+    this._delegate.ellipsoid.radii = this._radius
+    return this
   }
 
   get radius() {
@@ -44,31 +52,12 @@ class Ellipsoid extends Overlay {
     /**
      * set the location
      */
-    this._delegate.position = new Cesium.CallbackProperty(time => {
-      return Transform.transformWGS84ToCartesian(this._position)
-    })
-    /**
-     * set the orientation
-     */
-    this._delegate.orientation = new Cesium.CallbackProperty(time => {
-      return Cesium.Transforms.headingPitchRollQuaternion(
-        Transform.transformWGS84ToCartesian(this._position),
-        new Cesium.HeadingPitchRoll(
-          Cesium.Math.toRadians(this._position.heading),
-          Cesium.Math.toRadians(this._position.pitch),
-          Cesium.Math.toRadians(this._position.roll)
-        )
-      )
-    })
+    this.position = this._position
+
     /**
      *  initialize the Overlay parameter
      */
-    this._delegate.ellipsoid = {
-      ...this._style,
-      radii: new Cesium.CallbackProperty(time => {
-        return this._radius
-      })
-    }
+    this.radius = this._radius
   }
 
   /**
@@ -79,9 +68,9 @@ class Ellipsoid extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['radius']
     this._style = style
-    this._delegate.ellipsoid &&
-      Util.merge(this._delegate.ellipsoid, this._style)
+    Util.merge(this._delegate.ellipsoid, this._style)
     return this
   }
 }

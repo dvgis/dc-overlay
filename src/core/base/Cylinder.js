@@ -2,32 +2,38 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:22:10
+ * @Last Modified time: 2020-06-22 22:43:08
  */
-const { Overlay, Util, State, Transform } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
 class Cylinder extends Overlay {
   constructor(position, length, topRadius, bottomRadius) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Cylinder: the position invalid')
-    }
     super()
-    this._position = position
-    this._length = length
-    this._topRadius = topRadius
-    this._bottomRadius = bottomRadius
-    this._delegate = new Cesium.Entity()
+    this._position = Parse.parsePosition(position)
+    this._length = +length || 0
+    this._topRadius = +topRadius || 0
+    this._bottomRadius = +bottomRadius || 0
+    this._delegate = new Cesium.Entity({ cylinder: {} })
     this.type = Overlay.getOverlayType('cylinder')
     this._state = State.INITIALIZED
   }
 
   set position(position) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Cylinder: the position invalid')
-    }
-    this._position = position
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    this._delegate.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      Transform.transformWGS84ToCartesian(this._position),
+      new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(this._position.heading),
+        Cesium.Math.toRadians(this._position.pitch),
+        Cesium.Math.toRadians(this._position.roll)
+      )
+    )
+    return this
   }
 
   get position() {
@@ -35,7 +41,9 @@ class Cylinder extends Overlay {
   }
 
   set length(length) {
-    this._length = length
+    this._length = +length || 0
+    this._delegate.cylinder.length = this._length
+    return this
   }
 
   get length() {
@@ -43,7 +51,9 @@ class Cylinder extends Overlay {
   }
 
   set topRadius(topRadius) {
-    this._topRadius = topRadius
+    this._topRadius = +topRadius || 0
+    this._delegate.cylinder.topRadius = this._topRadius
+    return this
   }
 
   get topRadius() {
@@ -51,7 +61,9 @@ class Cylinder extends Overlay {
   }
 
   set bottomRadius(bottomRadius) {
-    this._bottomRadius = bottomRadius
+    this._bottomRadius = +bottomRadius || 0
+    this._delegate.cylinder.bottomRadius = this._bottomRadius
+    return this
   }
 
   get bottomRadius() {
@@ -62,37 +74,13 @@ class Cylinder extends Overlay {
     /**
      * set the location
      */
-    this._delegate.position = new Cesium.CallbackProperty(time => {
-      return Transform.transformWGS84ToCartesian(this._position)
-    })
-    /**
-     * set the orientation
-     */
-    this._delegate.orientation = new Cesium.CallbackProperty(time => {
-      return Cesium.Transforms.headingPitchRollQuaternion(
-        Transform.transformWGS84ToCartesian(this._position),
-        new Cesium.HeadingPitchRoll(
-          Cesium.Math.toRadians(this._position.heading),
-          Cesium.Math.toRadians(this._position.pitch),
-          Cesium.Math.toRadians(this._position.roll)
-        )
-      )
-    })
+    this.position = this._position
     /**
      *  initialize the Overlay parameter
      */
-    this._delegate.cylinder = {
-      ...this._style,
-      topRadius: new Cesium.CallbackProperty(time => {
-        return this._topRadius
-      }),
-      bottomRadius: new Cesium.CallbackProperty(time => {
-        return this._bottomRadius
-      }),
-      length: new Cesium.CallbackProperty(time => {
-        return this._length
-      })
-    }
+    this.length = this._length
+    this.topRadius = this._topRadius
+    this.bottomRadius = this._bottomRadius
   }
 
   /**
@@ -103,8 +91,13 @@ class Cylinder extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+
+    delete style['length'] &&
+      delete style['topRadius'] &&
+      delete style['bottomRadius']
+
     this._style = style
-    this._delegate.cylinder && Util.merge(this._delegate.cylinder, this._style)
+    Util.merge(this._delegate.cylinder, this._style)
     return this
   }
 }

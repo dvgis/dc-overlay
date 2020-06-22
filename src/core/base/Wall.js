@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-02-25 18:28:36
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:45:48
+ * @Last Modified time: 2020-06-22 22:58:12
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -11,21 +11,19 @@ const { Cesium } = DC.Namespace
 
 class Wall extends Overlay {
   constructor(positions) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('Wall: the positions invalid')
-    }
     super()
     this._positions = Parse.parsePositions(positions)
-    this._delegate = new Cesium.Entity()
+    this._delegate = new Cesium.Entity({ wall: {} })
     this.type = Overlay.getOverlayType('wall')
     this._state = State.INITIALIZED
   }
 
   set positions(positions) {
-    if (!Util.checkPositions(positions)) {
-      throw new Error('Wall: the positions invalid')
-    }
     this._positions = Parse.parsePositions(positions)
+    this._delegate.wall.positions = Transform.transformWGS84ArrayToCartesianArray(
+      this._positions
+    )
+    return this
   }
 
   get positions() {
@@ -34,14 +32,9 @@ class Wall extends Overlay {
 
   _mountedHook() {
     /**
-     *  initialize the Overlay parameter
+     * set the location
      */
-    this._delegate.wall = {
-      ...this._style,
-      positions: new Cesium.CallbackProperty(time => {
-        return Transform.transformWGS84ArrayToCartesianArray(this._positions)
-      })
-    }
+    this.positions = this._positions
   }
 
   /**
@@ -52,8 +45,9 @@ class Wall extends Overlay {
     if (Object.keys(style).length == 0) {
       return this
     }
+    delete style['positions']
     this._style = style
-    this._delegate.wall && Util.merge(this._delegate.wall, this._style)
+    Util.merge(this._delegate.wall, this._style)
     return this
   }
 }

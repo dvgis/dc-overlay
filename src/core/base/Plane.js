@@ -2,33 +2,46 @@
  * @Author: Caven
  * @Date: 2020-02-18 16:08:26
  * @Last Modified by: Caven
- * @Last Modified time: 2020-05-11 22:28:49
+ * @Last Modified time: 2020-06-22 23:03:55
  */
 
-const { Overlay, Util, State, Transform } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
 class Plane extends Overlay {
   constructor(position, width, height, direction) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Plane: the position invalid')
-    }
     super()
-    this._position = position
-    this._width = width
-    this._height = height
+    this._position = Parse.parsePosition(position)
+    this._width = +width || 0
+    this._height = +height || 0
     this._plane = new Cesium.Plane(Cesium.Cartesian3.clone(direction), 0.0)
-    this._delegate = new Cesium.Entity()
+    this._delegate = new Cesium.Entity({
+      plane: {
+        dimensions: {
+          x: this._width,
+          y: this._height
+        }
+      }
+    })
     this.type = Overlay.getOverlayType('plane')
     this._state = State.INITIALIZED
   }
 
   set position(position) {
-    if (!Util.checkPosition(position)) {
-      throw new Error('Plane: the position invalid')
-    }
-    this._position = position
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    this._delegate.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+      Transform.transformWGS84ToCartesian(this._position),
+      new Cesium.HeadingPitchRoll(
+        Cesium.Math.toRadians(this._position.heading),
+        Cesium.Math.toRadians(this._position.pitch),
+        Cesium.Math.toRadians(this._position.roll)
+      )
+    )
+    return this
   }
 
   get position() {
@@ -36,7 +49,9 @@ class Plane extends Overlay {
   }
 
   set width(width) {
-    this._width = width
+    this._width = +width || 0
+    this._delegate.plan.dimensions.x = this._width
+    return this
   }
 
   get width() {
@@ -44,7 +59,9 @@ class Plane extends Overlay {
   }
 
   set height(height) {
-    this._height = height
+    this._height = +height || 0
+    this._delegate.plan.dimensions.y = this._height
+    return this
   }
 
   get height() {
@@ -53,41 +70,19 @@ class Plane extends Overlay {
 
   set direction(direction) {
     this._plane = new Cesium.Plane(direction, 0.0)
+    this._delegate.plan.plane = new Cesium.Plane(direction, 0.0)
+    return this
   }
 
   _mountedHook() {
     /**
      * set the location
      */
-    this._delegate.position = new Cesium.CallbackProperty(time => {
-      return Transform.transformWGS84ToCartesian(this._position)
-    })
-
-    /**
-     * set the orientation
-     */
-    this._delegate.orientation = new Cesium.CallbackProperty(time => {
-      return Cesium.Transforms.headingPitchRollQuaternion(
-        Transform.transformWGS84ToCartesian(this._center),
-        new Cesium.HeadingPitchRoll(
-          Cesium.Math.toRadians(this._position.heading),
-          Cesium.Math.toRadians(this._position.pitch),
-          Cesium.Math.toRadians(this._position.roll)
-        )
-      )
-    })
+    this.position = this._position
     /**
      *  initialize the Overlay parameter
      */
-    this._delegate.plane = {
-      ...this._style,
-      plane: new Cesium.CallbackProperty(time => {
-        return this._plane
-      }),
-      dimensions: new Cesium.CallbackProperty(time => {
-        return { x: this._width, y: this._height }
-      })
-    }
+    this.direction = this._direction
   }
 
   /**
@@ -98,8 +93,9 @@ class Plane extends Overlay {
     if (Object.keys(style).length === 0) {
       return this
     }
+    delete style['dimensions'] && delete ['plan']
     this._style = style
-    this._delegate.plane && Util.merge(this._delegate.plane, this._style)
+    Util.merge(this._delegate.plane, this._style)
     return this
   }
 }
