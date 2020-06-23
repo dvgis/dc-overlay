@@ -1,27 +1,29 @@
 /*
  * @Author: Caven
- * @Date: 2020-04-11 12:58:17
+ * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:29:42
+ * @Last Modified time: 2020-06-23 10:30:16
  */
-
 const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
-class Corridor extends Overlay {
+class Rectangle extends Overlay {
   constructor(positions) {
     super()
     this._positions = Parse.parsePositions(positions)
-    this._delegate = new Cesium.Entity({ corridor: {} })
-    this.type = Overlay.getOverlayType('corridor')
+    this._delegate = new Cesium.Entity({ rectangle: {} })
+    this.type = Overlay.getOverlayType('rectangle')
     this._state = State.INITIALIZED
   }
 
   set positions(positions) {
     this._positions = Parse.parsePositions(positions)
-    this._delegate.corridor.positions = Transform.transformWGS84ArrayToCartesianArray(
-      this._positions
+    this._delegate.rectangle.coordinates = Cesium.Rectangle.fromDegrees(
+      this._positions[0]?.lng,
+      this._positions[0]?.lat,
+      this._positions[1]?.lng,
+      this._positions[1]?.lat
     )
     return this
   }
@@ -32,7 +34,7 @@ class Corridor extends Overlay {
 
   _mountedHook() {
     /**
-     *  set the location
+     * set the location
      */
     this.positions = this._positions
   }
@@ -47,11 +49,11 @@ class Corridor extends Overlay {
     }
     delete style['positions']
     this._style = style
-    Util.merge(this._delegate.corridor, this._style)
+    Util.merge(this._delegate.rectangle, this._style)
     return this
   }
 }
 
-Overlay.registerType('corridor')
+Overlay.registerType('rectangle')
 
-export default Corridor
+export default Rectangle

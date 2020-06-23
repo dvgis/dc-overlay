@@ -2,18 +2,97 @@
  * @Author: Caven
  * @Date: 2020-02-12 21:44:24
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-22 23:08:27
+ * @Last Modified time: 2020-06-23 09:52:07
  */
 
-const { Billboard, Position, State, Transform } = DC
+const { Position, Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
-class CustomBillboard extends Billboard {
+class CustomBillboard extends Overlay {
   constructor(position, icon) {
-    super(position, icon)
+    super()
+    this._delegate = new Cesium.Entity({ billboard: {} })
+    this._position = Parse.parsePosition(position)
+    this._icon = icon
+    this._size = [32, 32]
     this.type = Overlay.getOverlayType('custom_billboard')
     this._state = State.INITIALIZED
+  }
+
+  set position(position) {
+    this._position = Parse.parsePosition(position)
+    this._delegate.position = Transform.transformWGS84ToCartesian(
+      this._position
+    )
+    return this
+  }
+
+  get position() {
+    return this._position
+  }
+
+  set icon(icon) {
+    this._icon = icon
+    this._delegate.billboard.image = this._icon
+    return this
+  }
+
+  get icon() {
+    return this._icon
+  }
+
+  set size(size) {
+    if (!Array.isArray(size)) {
+      throw new Error('Billboard: the size invalid')
+    }
+    this._size = size
+    this._delegate.billboard.width = this._size[0] || 32
+    this._delegate.billboard.height = this._size[1] || 32
+    return this
+  }
+
+  get size() {
+    return this._size
+  }
+
+  _mountedHook() {
+    /**
+     * set the location
+     */
+    this.position = this._position
+    /**
+     *  initialize the Overlay parameter
+     */
+    this.icon = this._icon
+    this.size = this._size
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    this._delegate.label = {
+      ...textStyle,
+      text: text
+    }
+    return this
+  }
+
+  /**
+   *
+   * @param {*} style
+   */
+  setStyle(style) {
+    if (!style || Object.keys(style).length === 0) {
+      return this
+    }
+    delete style['image'] && delete style['width'] && delete style['height']
+    this._style = style
+    Util.merge(this._delegate.billboard, this._style)
+    return this
   }
 
   /**
