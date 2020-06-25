@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:27:51
+ * @Last Modified time: 2020-06-25 09:12:29
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -81,6 +81,15 @@ class Cylinder extends Overlay {
     this.length = this._length
     this.topRadius = this._topRadius
     this.bottomRadius = this._bottomRadius
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**

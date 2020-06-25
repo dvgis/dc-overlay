@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-02-18 16:08:26
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-22 23:03:55
+ * @Last Modified time: 2020-06-25 09:12:53
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -83,6 +83,15 @@ class Plane extends Overlay {
      *  initialize the Overlay parameter
      */
     this.direction = this._direction
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**

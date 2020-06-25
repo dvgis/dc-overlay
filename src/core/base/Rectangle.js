@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:30:16
+ * @Last Modified time: 2020-06-25 09:13:16
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -37,6 +37,15 @@ class Rectangle extends Overlay {
      * set the location
      */
     this.positions = this._positions
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**

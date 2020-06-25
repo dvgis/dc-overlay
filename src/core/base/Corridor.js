@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-11 12:58:17
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:29:42
+ * @Last Modified time: 2020-06-25 09:12:20
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -35,6 +35,15 @@ class Corridor extends Overlay {
      *  set the location
      */
     this.positions = this._positions
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**

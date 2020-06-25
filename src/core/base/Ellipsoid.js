@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 09:47:41
+ * @Last Modified time: 2020-06-25 09:36:45
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -12,8 +12,8 @@ class Ellipsoid extends Overlay {
   constructor(position, radius) {
     super()
     this._position = Parse.parsePosition(position)
-    this._radius = +radius || 0
-    this._delegate = new Cesium.Entity()
+    this._radius = radius || { x: 10, y: 10, z: 10 }
+    this._delegate = new Cesium.Entity({ ellipsoid: {} })
     this.type = Overlay.getOverlayType('ellipsoid')
     this._state = State.INITIALIZED
   }
@@ -39,7 +39,7 @@ class Ellipsoid extends Overlay {
   }
 
   set radius(radius) {
-    this._radius = +radius || 0
+    this._radius = radius || { x: 10, y: 10, z: 10 }
     this._delegate.ellipsoid.radii = this._radius
     return this
   }

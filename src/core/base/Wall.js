@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-02-25 18:28:36
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-22 22:58:12
+ * @Last Modified time: 2020-06-25 09:13:22
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -35,6 +35,15 @@ class Wall extends Overlay {
      * set the location
      */
     this.positions = this._positions
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**

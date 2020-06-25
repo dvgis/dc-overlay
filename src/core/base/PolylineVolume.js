@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:30:02
+ * @Last Modified time: 2020-06-25 09:12:58
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -50,6 +50,15 @@ class PolylineVolume extends Overlay {
      *  initialize the Overlay parameter
      */
     this.shape = this._shape
+  }
+
+  /**
+   *
+   * @param {*} text
+   * @param {*} textStyle
+   */
+  setLabel(text, textStyle) {
+    return this
   }
 
   /**
