@@ -2,7 +2,7 @@
  * @Author: Caven
  * @Date: 2020-04-09 20:03:32
  * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:30:38
+ * @Last Modified time: 2020-07-28 14:13:12
  */
 
 import Box from './core/base/Box'
@@ -15,6 +15,7 @@ import PolylineVolume from './core/base/PolylineVolume'
 import Rectangle from './core/base/Rectangle'
 import Wall from './core/base/Wall'
 import CustomBillboard from './core/custom/CustomBillboard'
+import CustomLabel from './core/custom/CustomLabel'
 
 const overlays = {
   Box,
@@ -26,7 +27,8 @@ const overlays = {
   PolylineVolume,
   Rectangle,
   Wall,
-  CustomBillboard
+  CustomBillboard,
+  CustomLabel
 }
 
 DC.mixin(overlays)
