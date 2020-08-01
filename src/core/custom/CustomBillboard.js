@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-02-12 21:44:24
- * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 09:52:07
  */
 
 const { Position, Overlay, Util, State, Transform, Parse } = DC
@@ -114,7 +112,6 @@ class CustomBillboard extends Overlay {
   }
 
   /**
-   *
    * @param {*} radius
    * @param {*} style
    * @param {*} rotateAmount

@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-02-25 18:28:36
- * @Last Modified by: Caven
- * @Last Modified time: 2020-06-23 10:28:01
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -13,15 +11,15 @@ class Box extends Overlay {
   constructor(position, length, width, height) {
     super()
     this._position = Parse.parsePosition(position)
-    this._length = +length || 0
-    this._width = +width || 0
-    this._height = +height || 0
+    this._length = length
+    this._width = width
+    this._height = height
     this._delegate = new Cesium.Entity({
       box: {
         dimensions: {
-          x: this._length,
-          y: this._width,
-          z: this._height
+          x: +this._length,
+          y: +this._width,
+          z: +this._height
         }
       }
     })
@@ -50,8 +48,8 @@ class Box extends Overlay {
   }
 
   set length(length) {
-    this._length = +length || 0
-    this._delegate.box.dimensions.x = this._length
+    this._length = length || 0
+    this._delegate.box.dimensions.x = +this._length
     return this
   }
 
@@ -60,8 +58,8 @@ class Box extends Overlay {
   }
 
   set width(width) {
-    this._width = +width || 0
-    this._delegate.box.dimensions.y = this._width
+    this._width = width || 0
+    this._delegate.box.dimensions.y = +this._width
     return this
   }
 
@@ -70,8 +68,8 @@ class Box extends Overlay {
   }
 
   set height(height) {
-    this._height = +height || 0
-    this._delegate.box.dimensions.z = this._height
+    this._height = height || 0
+    this._delegate.box.dimensions.z = +this._height
     return this
   }
 
@@ -91,7 +89,7 @@ class Box extends Overlay {
    * @param {*} style
    */
   setStyle(style) {
-    if (Object.keys(style).length == 0) {
+    if (Object.keys(style).length === 0) {
       return this
     }
     delete style['length'] && delete style['width'] && delete style['height']

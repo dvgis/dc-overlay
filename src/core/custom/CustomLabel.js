@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-07-28 13:37:59
- * @Last Modified by: Caven
- * @Last Modified time: 2020-07-28 13:43:06
  */
 
 const { Position, Overlay, Util, State, Transform, Parse } = DC

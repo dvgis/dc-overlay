@@ -51,7 +51,7 @@ class Wall extends Overlay {
    * @param {*} style
    */
   setStyle(style) {
-    if (Object.keys(style).length == 0) {
+    if (Object.keys(style).length === 0) {
       return this
     }
     delete style['positions']

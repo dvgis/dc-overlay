@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
- * @Last Modified by: Caven
- * @Last Modified time: 2020-06-25 09:12:58
  */
 const { Overlay, Util, State, Transform, Parse } = DC
 
@@ -66,7 +64,7 @@ class PolylineVolume extends Overlay {
    * @param {*} style
    */
   setStyle(style) {
-    if (Object.keys(style).length == 0) {
+    if (Object.keys(style).length === 0) {
       return this
     }
     delete style['positions'] && delete style['shap']
