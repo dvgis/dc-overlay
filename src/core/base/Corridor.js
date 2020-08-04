@@ -45,8 +45,9 @@ class Corridor extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {Corridor}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {

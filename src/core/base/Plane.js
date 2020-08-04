@@ -93,8 +93,9 @@ class Plane extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {Plane}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {

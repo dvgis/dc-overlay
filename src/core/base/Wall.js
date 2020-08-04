@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-02-25 18:28:36
- * @Last Modified by: Caven
- * @Last Modified time: 2020-06-25 09:13:22
  */
 
 const { Overlay, Util, State, Transform, Parse } = DC
@@ -39,16 +37,18 @@ class Wall extends Overlay {
 
   /**
    *
-   * @param {*} text
-   * @param {*} textStyle
+   * @param text
+   * @param textStyle
+   * @returns {Wall}
    */
   setLabel(text, textStyle) {
     return this
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {Wall}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {

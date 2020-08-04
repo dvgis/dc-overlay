@@ -70,8 +70,9 @@ class Ellipse extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {Ellipse}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {

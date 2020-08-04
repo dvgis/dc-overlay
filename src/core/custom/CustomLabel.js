@@ -65,8 +65,9 @@ class CustomLabel extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets  VLine style
+   * @param style
+   * @returns {CustomLabel}
    */
   setVLine(style) {
     if (this._position.alt > 0 && !this._delegate.polyline) {
@@ -83,10 +84,11 @@ class CustomLabel extends Overlay {
   }
 
   /**
-   *
-   * @param {*} radius
-   * @param {*} style
-   * @param {*} rotateAmount
+   * Sets bottom circle
+   * @param radius
+   * @param style
+   * @param rotateAmount
+   * @returns {CustomLabel}
    */
   setBottomCircle(radius, style, rotateAmount) {
     let stRotation = 0

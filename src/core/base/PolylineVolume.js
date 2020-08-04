@@ -51,17 +51,18 @@ class PolylineVolume extends Overlay {
   }
 
   /**
-   *
-   * @param {*} text
-   * @param {*} textStyle
+   * @param text
+   * @param textStyle
+   * @returns {PolylineVolume}
    */
   setLabel(text, textStyle) {
     return this
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets style
+   * @param style
+   * @returns {PolylineVolume}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {

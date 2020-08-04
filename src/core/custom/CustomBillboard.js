@@ -67,9 +67,10 @@ class CustomBillboard extends Overlay {
   }
 
   /**
-   *
-   * @param {*} text
-   * @param {*} textStyle
+   * Sets label
+   * @param text
+   * @param textStyle
+   * @returns {CustomBillboard}
    */
   setLabel(text, textStyle) {
     this._delegate.label = {
@@ -80,8 +81,9 @@ class CustomBillboard extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {CustomBillboard}
    */
   setStyle(style) {
     if (!style || Object.keys(style).length === 0) {
@@ -94,8 +96,9 @@ class CustomBillboard extends Overlay {
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets VLine style
+   * @param style
+   * @returns {CustomBillboard}
    */
   setVLine(style) {
     if (this._position.alt > 0 && !this._delegate.polyline) {

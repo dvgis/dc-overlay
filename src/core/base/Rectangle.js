@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-04-14 11:10:00
- * @Last Modified by: Caven
- * @Last Modified time: 2020-06-25 09:13:16
  */
 const { Overlay, Util, State, Parse } = DC
 
@@ -40,17 +38,18 @@ class Rectangle extends Overlay {
   }
 
   /**
-   *
-   * @param {*} text
-   * @param {*} textStyle
+   * @param text
+   * @param textStyle
+   * @returns {Rectangle}
    */
   setLabel(text, textStyle) {
     return this
   }
 
   /**
-   *
-   * @param {*} style
+   * Sets Style
+   * @param style
+   * @returns {Rectangle}
    */
   setStyle(style) {
     if (Object.keys(style).length === 0) {
