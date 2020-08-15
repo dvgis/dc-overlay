@@ -22,7 +22,7 @@
 <!--Core Package-->
 <script src="libs/dc-sdk/dc.core.min.js"></script>
 <!--Overlay Package-->
-<script src="libs/dc-sdk/overlay/dc.overlay.min.js"></script>
+<script src="libs/dc-overlay/dc.overlay.min.js"></script>
 <!--Main Style Sheet -->
 <link href="libs/dc-sdk/dc.core.min.css" rel="stylesheet" type="text/css" />
 ```

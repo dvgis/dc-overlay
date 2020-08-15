@@ -22,7 +22,7 @@
 <!--核心包-->
 <script src="libs/dc-sdk/dc.core.min.js"></script>
 <!--要素包-->
-<script src="libs/dc-sdk/overlay/dc.overlay.min.js"></script>
+<script src="libs/dc-overlay/dc.overlay.min.js"></script>
 <!--主要样式-->
 <link href="libs/dc-sdk/dc.core.min.css" rel="stylesheet" type="text/css" />
 ```
