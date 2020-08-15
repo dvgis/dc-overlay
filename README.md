@@ -6,7 +6,7 @@
 <img src="https://img.shields.io/npm/dw/@dvgis/dc-overlay?logo=npm"/>
 </p>
 
-[**🇨🇳 中文**](./README_zh.md) | [**🇬🇧English**](./)
+[**🇨🇳 中文**](./README_zh.md) | [**🇬🇧English**](./README.md)
 
 > DC-SDK overlay package
 
