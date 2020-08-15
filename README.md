@@ -1,4 +1,10 @@
-# DC-SDK
+# DC-Overlay
+
+<p>
+<img src="https://img.shields.io/badge/license-Apache%202-blue"/>
+<img src="https://img.shields.io/github/package-json/v/dvgis/dc-overlay?color=orange&logo=github" />
+<img src="https://img.shields.io/npm/dw/@dvgis/dc-overlay?logo=npm"/>
+</p>
 
 [**🇨🇳 中文**](./README_zh.md) | [**🇬🇧English**](./)
 
