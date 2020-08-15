@@ -1,19 +1,19 @@
 {
   "name": "@dvgis/dc-overlay",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "DC-SDK overlay package",
   "main": "index.js",
-  "repository": "https://github.com/Digital-Visual/dc-overlay.git",
+  "repository": "https://github.com/dvgis/dc-overlay.git",
   "author": "Caven Chen <cavencj@gmail.com>",
   "license": "Apache 2.0",
-  "homepage": "http://dc.dvgis.cn",
+  "homepage": "https://www.dvgis.cn",
   "keywords": [
     "3D",
     "webgl",
     "map",
     "globe",
     "cesium",
-    "plot"
+    "dc-sdk"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

@@ -1,11 +1,9 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-04-09 20:02:37
- * @Last Modified by: Caven
- * @Last Modified time: 2020-05-12 14:34:50
  */
 
-const install = function (DC) {
+const install = function(DC) {
   if (!DC || !DC.init) {
     throw new Error('Plot: Missing DC Base')
   }
@@ -25,5 +23,5 @@ if (typeof window !== 'undefined' && window.DC) {
 }
 
 module.exports = {
-  install,
+  install
 }

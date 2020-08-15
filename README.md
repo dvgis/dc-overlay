@@ -2,12 +2,9 @@
 
 [**🇨🇳 中文**](./README_zh.md) | [**🇬🇧English**](./)
 
-> DC-SDK ovrerlay package
-> [home](http://dc.dvgis.cn)
+> DC-SDK overlay package
 
-```warning
-Tips：This SDK is JS+GIS framework package. Developers need to have some front-end technology and GIS related technology
-```
+> [Home Page](http://dc.dvgis.cn)
 
 ## Installation
 
@@ -19,7 +16,7 @@ Tips：This SDK is JS+GIS framework package. Developers need to have some front-
 <!--Core Package-->
 <script src="libs/dc-sdk/dc.core.min.js"></script>
 <!--Overlay Package-->
-<script src="libs/dc-sdk/overlay/dc.core.min.js"></script>
+<script src="libs/dc-sdk/overlay/dc.overlay.min.js"></script>
 <!--Main Style Sheet -->
 <link href="libs/dc-sdk/dc.core.min.css" rel="stylesheet" type="text/css" />
 ```
@@ -75,11 +72,14 @@ DC.ready(() => {
 
 ## Documentation
 
+[DC Api](https://resource.dvgis.cn/dc-api/)
+
 [Cesium-Api](https://cesium.com/docs/cesiumjs-ref-doc/)
 
-[DC-SDK-Api](http://dc.dvgis.cn/#/docs)
-
 ## Demo
+
+| ![picture](http://dc.dvgis.cn/examples/images/overlay/point_custom.png)  | ![picture](http://dc.dvgis.cn/examples/images/overlay/label_custom.png) | ![picture](http://dc.dvgis.cn/examples/images/overlay/wall.png) | ![picture](http://dc.dvgis.cn/examples/images/overlay/wall_trail.gif) |
+| :---------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-------------------------------------------------------------------: |
 
 ## Copyright statement
 

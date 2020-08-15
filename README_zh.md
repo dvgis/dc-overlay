@@ -3,11 +3,8 @@
 [**🇨🇳 中文**](./) | [**🇬🇧English**](./README.md)
 
 > DC-SDK 要素包
-> [主页](http://dc.dvgis.cn)
 
-```warning
-Tips：本框架是 JS+GIS 的框架包。开发者需要有一定的前端技术和 GIS 相关技术
-```
+> [主页](http://dc.dvgis.cn)
 
 ## 安装
 
@@ -75,11 +72,14 @@ DC.ready(() => {
 
 ## 文档
 
+[DC Api](https://resource.dvgis.cn/dc-api/)
+
 [Cesium-Api](https://cesium.com/docs/cesiumjs-ref-doc/)
 
-[DC-SDK-Api](http://dc.dvgis.cn/#/docs)
-
 ## 示例
+
+| ![picture](http://dc.dvgis.cn/examples/images/overlay/point_custom.png)  | ![picture](http://dc.dvgis.cn/examples/images/overlay/label_custom.png) | ![picture](http://dc.dvgis.cn/examples/images/overlay/wall.png) | ![picture](http://dc.dvgis.cn/examples/images/overlay/wall_trail.gif) |
+| :---------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :---------------------------------------------------------------------: | :-------------------------------------------------------------------: |
 
 ## 版权声明
 

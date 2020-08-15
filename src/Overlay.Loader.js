@@ -1,8 +1,6 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-04-09 20:03:32
- * @Last Modified by: Caven
- * @Last Modified time: 2020-07-28 14:13:12
  */
 
 import Box from './core/base/Box'
