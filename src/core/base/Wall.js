@@ -59,6 +59,26 @@ class Wall extends Overlay {
     Util.merge(this._delegate.wall, this._style)
     return this
   }
+
+  /**
+   * Parses from entity
+   * @param entity
+   * @returns {Wall|any}
+   */
+  static fromEntity(entity) {
+    let wall = undefined
+    let now = Cesium.JulianDate.now()
+    if (entity.polyline) {
+      let positions = Transform.transformCartesianArrayToWGS84Array(
+        entity.polyline.positions.getValue(now)
+      )
+      wall = new Wall(positions)
+      wall.attr = {
+        ...entity.properties.getValue(now)
+      }
+    }
+    return wall
+  }
 }
 
 Overlay.registerType('wall')

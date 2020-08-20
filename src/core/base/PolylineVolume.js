@@ -69,10 +69,31 @@ class PolylineVolume extends Overlay {
     if (Object.keys(style).length === 0) {
       return this
     }
-    delete style['positions'] && delete style['shap']
+    delete style['positions'] && delete style['shape']
     this._style = style
     Util.merge(this._delegate.polylineVolume, this._style)
     return this
+  }
+
+  /**
+   * Parses from entity
+   * @param entity
+   * @param shape
+   * @returns {PolylineVolume|any}
+   */
+  static fromEntity(entity, shape) {
+    let polylineVolume = undefined
+    let now = Cesium.JulianDate.now()
+    if (entity.polyline) {
+      let positions = Transform.transformCartesianArrayToWGS84Array(
+        entity.polyline.positions.getValue(now)
+      )
+      polylineVolume = new PolylineVolume(positions, shape)
+      polylineVolume.attr = {
+        ...entity.properties.getValue(now)
+      }
+    }
+    return polylineVolume
   }
 }
 

@@ -58,6 +58,26 @@ class Corridor extends Overlay {
     Util.merge(this._delegate.corridor, this._style)
     return this
   }
+
+  /**
+   * Parses from entity
+   * @param entity
+   * @returns {Corridor|any}
+   */
+  static fromEntity(entity) {
+    let corridor = undefined
+    let now = Cesium.JulianDate.now()
+    if (entity.polyline) {
+      let positions = Transform.transformCartesianArrayToWGS84Array(
+        entity.polyline.positions.getValue(now)
+      )
+      corridor = new Corridor(positions)
+      corridor.attr = {
+        ...entity.properties.getValue(now)
+      }
+    }
+    return corridor
+  }
 }
 
 Overlay.registerType('corridor')
