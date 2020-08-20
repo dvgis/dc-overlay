@@ -44,7 +44,7 @@ class Ellipsoid extends Overlay {
   }
 
   get radius() {
-    return this._redius
+    return this._radius
   }
 
   _mountedHook() {
