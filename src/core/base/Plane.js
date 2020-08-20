@@ -101,7 +101,7 @@ class Plane extends Overlay {
     if (Object.keys(style).length === 0) {
       return this
     }
-    delete style['dimensions'] && delete ['plan']
+    delete style['dimensions'] && delete ['plane']
     this._style = style
     Util.merge(this._delegate.plane, this._style)
     return this

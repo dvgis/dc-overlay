@@ -73,7 +73,7 @@ class Corridor extends Overlay {
       )
       corridor = new Corridor(positions)
       corridor.attr = {
-        ...entity.properties.getValue(now)
+        ...entity?.properties?.getValue(now)
       }
     }
     return corridor

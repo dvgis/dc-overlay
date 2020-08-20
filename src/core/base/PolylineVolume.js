@@ -90,7 +90,7 @@ class PolylineVolume extends Overlay {
       )
       polylineVolume = new PolylineVolume(positions, shape)
       polylineVolume.attr = {
-        ...entity.properties.getValue(now)
+        ...entity?.properties?.getValue(now)
       }
     }
     return polylineVolume

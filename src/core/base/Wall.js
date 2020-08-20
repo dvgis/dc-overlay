@@ -74,7 +74,7 @@ class Wall extends Overlay {
       )
       wall = new Wall(positions)
       wall.attr = {
-        ...entity.properties.getValue(now)
+        ...entity?.properties?.getValue(now)
       }
     }
     return wall
