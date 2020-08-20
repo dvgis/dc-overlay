@@ -31,7 +31,7 @@ class PolylineVolume extends Overlay {
 
   set shape(shape) {
     this._shape = shape || []
-    this._delegate.polylineVolume.shap = this._shape
+    this._delegate.polylineVolume.shape = this._shape
     return this
   }
 
