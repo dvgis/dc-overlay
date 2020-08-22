@@ -1,14 +1,9 @@
-/*
+/**
  * @Author: Caven
  * @Date: 2020-01-18 18:22:23
- * @Last Modified by: Caven
- * @Last Modified time: 2020-07-27 10:47:43
  */
-
 const path = require('path')
 const webpack = require('webpack')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const JavaScriptObfuscator = require('webpack-obfuscator')
 
 function resolve(dir) {
@@ -18,14 +13,8 @@ function resolve(dir) {
 module.exports = env => {
   const IS_PROD = (env && env.production) || false
   const publicPath = IS_PROD ? '/' : '/'
-  let plugins = [
-    new MiniCssExtractPlugin({
-      filename: IS_PROD ? '[name].min.css' : '[name].css',
-      allChunks: true
-    })
-  ]
+  let plugins = []
   if (IS_PROD) {
-    plugins.push(new OptimizeCssAssetsPlugin())
     plugins.push(new webpack.NoEmitOnErrorsPlugin())
     plugins.push(
       new JavaScriptObfuscator(
@@ -48,10 +37,7 @@ module.exports = env => {
       sourcePrefix: ''
     },
     amd: {
-      toUrlUndefinded: true
-    },
-    node: {
-      fs: 'empty'
+      toUrlUndefined: true
     },
     module: {
       unknownContextCritical: false,
@@ -60,35 +46,11 @@ module.exports = env => {
           test: /\.js$/,
           exclude: /node_modules/,
           loader: 'babel-loader',
-          query: {
+          options: {
             presets: ['@babel/preset-env'],
             compact: false,
             ignore: ['checkTree']
           }
-        },
-        {
-          test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {
-              loader: 'css-loader'
-            },
-            {
-              loader: 'sass-loader'
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            {
-              loader: 'css-loader'
-            },
-            {
-              loader: 'sass-loader'
-            }
-          ]
         },
         {
           test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
