@@ -14,6 +14,12 @@ import Rectangle from './core/base/Rectangle'
 import Wall from './core/base/Wall'
 import CustomBillboard from './core/custom/CustomBillboard'
 import CustomLabel from './core/custom/CustomLabel'
+import AttackArrow from './core/plot/AttackArrow'
+import DoubleArrow from './core/plot/DoubleArrow'
+import FineArrow from './core/plot/FineArrow'
+import GatheringPlace from './core/plot/GatheringPlace'
+import StraightArrow from './core/plot/StraightArrow'
+import TailedAttackArrow from './core/plot/TailedAttackArrow'
 
 const overlays = {
   Box,
@@ -26,7 +32,13 @@ const overlays = {
   Rectangle,
   Wall,
   CustomBillboard,
-  CustomLabel
+  CustomLabel,
+  AttackArrow,
+  DoubleArrow,
+  FineArrow,
+  GatheringPlace,
+  StraightArrow,
+  TailedAttackArrow
 }
 
 DC.mixin(overlays)

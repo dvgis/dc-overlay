@@ -3,7 +3,7 @@
  * @Date: 2020-04-14 20:46:23
  */
 
-const { Overlay, Util, State, Parse } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -18,11 +18,8 @@ class Rectangle extends Overlay {
 
   set positions(positions) {
     this._positions = Parse.parsePositions(positions)
-    this._delegate.rectangle.coordinates = Cesium.Rectangle.fromDegrees(
-      this._positions[0]?.lng,
-      this._positions[0]?.lat,
-      this._positions[1]?.lng,
-      this._positions[1]?.lat
+    this._delegate.rectangle.coordinates = Cesium.Rectangle.fromCartesianArray(
+      Transform.transformWGS84ArrayToCartesianArray(this._positions)
     )
     return this
   }
