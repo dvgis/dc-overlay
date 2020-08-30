@@ -5,16 +5,7 @@
 
 import AttackArrow from './AttackArrow'
 
-const { Overlay, State, Transform, Parse } = DC
-
-const {
-  isClockWise,
-  mid,
-  distance,
-  getBaseLength,
-  getThirdPoint,
-  getQBSplinePoints
-} = DC.PlotUtil
+const { Overlay, PlotUtil, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -47,19 +38,25 @@ class TailedAttackArrow extends AttackArrow {
     let pnts = Parse.parsePolygonCoordToArray(this._positions)[0]
     let tailLeft = pnts[0]
     let tailRight = pnts[1]
-    if (isClockWise(pnts[0], pnts[1], pnts[2])) {
+    if (PlotUtil.isClockWise(pnts[0], pnts[1], pnts[2])) {
       tailLeft = pnts[1]
       tailRight = pnts[0]
     }
-    let midTail = mid(tailLeft, tailRight)
+    let midTail = PlotUtil.mid(tailLeft, tailRight)
     let bonePnts = [midTail].concat(pnts.slice(2))
     let headPnts = this._getArrowHeadPoints(bonePnts, tailLeft, tailRight)
     let neckLeft = headPnts[0]
     let neckRight = headPnts[4]
-    let tailWidth = distance(tailLeft, tailRight)
-    let allLen = getBaseLength(bonePnts)
+    let tailWidth = PlotUtil.distance(tailLeft, tailRight)
+    let allLen = PlotUtil.getBaseLength(bonePnts)
     let len = allLen * this.tailWidthFactor * this.swallowTailFactor
-    let swallowTailPnt = getThirdPoint(bonePnts[1], bonePnts[0], 0, len, true)
+    let swallowTailPnt = PlotUtil.getThirdPoint(
+      bonePnts[1],
+      bonePnts[0],
+      0,
+      len,
+      true
+    )
     let factor = tailWidth / allLen
     let bodyPnts = this._getArrowBodyPoints(
       bonePnts,
@@ -72,8 +69,8 @@ class TailedAttackArrow extends AttackArrow {
     leftPnts.push(neckLeft)
     let rightPnts = [tailRight].concat(bodyPnts.slice(count / 2, count))
     rightPnts.push(neckRight)
-    leftPnts = getQBSplinePoints(leftPnts)
-    rightPnts = getQBSplinePoints(rightPnts)
+    leftPnts = PlotUtil.getQBSplinePoints(leftPnts)
+    rightPnts = PlotUtil.getQBSplinePoints(rightPnts)
     return new Cesium.PolygonHierarchy(
       Transform.transformWGS84ArrayToCartesianArray(
         Parse.parsePositions(

@@ -3,18 +3,7 @@
  * @Date: 2020-08-29 22:15:47
  */
 
-const { Overlay, Util, State, Transform, Parse } = DC
-
-const {
-  distance,
-  getBaseLength,
-  getThirdPoint,
-  wholeDistance,
-  getAngleOfThreePoints,
-  isClockWise,
-  mid,
-  getBezierPoints
-} = DC.PlotUtil
+const { Overlay, Util, PlotUtil, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -44,19 +33,32 @@ class DoubleArrow extends Overlay {
   }
 
   _getArrowPoints(pnt1, pnt2, pnt3, clockWise) {
-    let midPnt = mid(pnt1, pnt2)
-    let len = distance(midPnt, pnt3)
-    let midPnt1 = getThirdPoint(pnt3, midPnt, 0, len * 0.3, true)
-    let midPnt2 = getThirdPoint(pnt3, midPnt, 0, len * 0.5, true)
-    midPnt1 = getThirdPoint(midPnt, midPnt1, HALF_PI, len / 5, clockWise)
-    midPnt2 = getThirdPoint(midPnt, midPnt2, HALF_PI, len / 4, clockWise)
+    let midPnt = PlotUtil.mid(pnt1, pnt2)
+    let len = PlotUtil.distance(midPnt, pnt3)
+    let midPnt1 = PlotUtil.getThirdPoint(pnt3, midPnt, 0, len * 0.3, true)
+    let midPnt2 = PlotUtil.getThirdPoint(pnt3, midPnt, 0, len * 0.5, true)
+    midPnt1 = PlotUtil.getThirdPoint(
+      midPnt,
+      midPnt1,
+      HALF_PI,
+      len / 5,
+      clockWise
+    )
+    midPnt2 = PlotUtil.getThirdPoint(
+      midPnt,
+      midPnt2,
+      HALF_PI,
+      len / 4,
+      clockWise
+    )
     let points = [midPnt, midPnt1, midPnt2, pnt3]
     // 计算箭头部分
     let arrowPnts = this._getArrowHeadPoints(points)
     let neckLeftPoint = arrowPnts[0]
     let neckRightPoint = arrowPnts[4]
     // 计算箭身部分
-    let tailWidthFactor = distance(pnt1, pnt2) / getBaseLength(points) / 2
+    let tailWidthFactor =
+      PlotUtil.distance(pnt1, pnt2) / PlotUtil.getBaseLength(points) / 2
     let bodyPnts = this._getArrowBodyPoints(
       points,
       neckLeftPoint,
@@ -76,55 +78,89 @@ class DoubleArrow extends Overlay {
   }
 
   _getArrowHeadPoints(points) {
-    let len = getBaseLength(points)
+    let len = PlotUtil.getBaseLength(points)
     let headHeight = len * this.headHeightFactor
     let headPnt = points[points.length - 1]
     let headWidth = headHeight * this.headWidthFactor
     let neckWidth = headHeight * this.neckWidthFactor
     let neckHeight = headHeight * this.neckHeightFactor
-    let headEndPnt = getThirdPoint(
+    let headEndPnt = PlotUtil.getThirdPoint(
       points[points.length - 2],
       headPnt,
       0,
       headHeight,
       true
     )
-    let neckEndPnt = getThirdPoint(
+    let neckEndPnt = PlotUtil.getThirdPoint(
       points[points.length - 2],
       headPnt,
       0,
       neckHeight,
       true
     )
-    let headLeft = getThirdPoint(headPnt, headEndPnt, HALF_PI, headWidth, false)
-    let headRight = getThirdPoint(headPnt, headEndPnt, HALF_PI, headWidth, true)
-    let neckLeft = getThirdPoint(headPnt, neckEndPnt, HALF_PI, neckWidth, false)
-    let neckRight = getThirdPoint(headPnt, neckEndPnt, HALF_PI, neckWidth, true)
+    let headLeft = PlotUtil.getThirdPoint(
+      headPnt,
+      headEndPnt,
+      HALF_PI,
+      headWidth,
+      false
+    )
+    let headRight = PlotUtil.getThirdPoint(
+      headPnt,
+      headEndPnt,
+      HALF_PI,
+      headWidth,
+      true
+    )
+    let neckLeft = PlotUtil.getThirdPoint(
+      headPnt,
+      neckEndPnt,
+      HALF_PI,
+      neckWidth,
+      false
+    )
+    let neckRight = PlotUtil.getThirdPoint(
+      headPnt,
+      neckEndPnt,
+      HALF_PI,
+      neckWidth,
+      true
+    )
     return [neckLeft, headLeft, headPnt, headRight, neckRight]
   }
 
   _getArrowBodyPoints(points, neckLeft, neckRight, tailWidthFactor) {
-    let allLen = wholeDistance(points)
-    let len = getBaseLength(points)
+    let allLen = PlotUtil.wholeDistance(points)
+    let len = PlotUtil.getBaseLength(points)
     let tailWidth = len * tailWidthFactor
-    let neckWidth = distance(neckLeft, neckRight)
+    let neckWidth = PlotUtil.distance(neckLeft, neckRight)
     let widthDif = (tailWidth - neckWidth) / 2
     let tempLen = 0
     let leftBodyPnts = []
     let rightBodyPnts = []
     for (let i = 1; i < points.length - 1; i++) {
       let angle =
-        getAngleOfThreePoints(points[i - 1], points[i], points[i + 1]) / 2
-      tempLen += distance(points[i - 1], points[i])
+        PlotUtil.getAngleOfThreePoints(
+          points[i - 1],
+          points[i],
+          points[i + 1]
+        ) / 2
+      tempLen += PlotUtil.distance(points[i - 1], points[i])
       let w = (tailWidth / 2 - (tempLen / allLen) * widthDif) / Math.sin(angle)
-      let left = getThirdPoint(
+      let left = PlotUtil.getThirdPoint(
         points[i - 1],
         points[i],
         Math.PI - angle,
         w,
         true
       )
-      let right = getThirdPoint(points[i - 1], points[i], angle, w, false)
+      let right = PlotUtil.getThirdPoint(
+        points[i - 1],
+        points[i],
+        angle,
+        w,
+        false
+      )
       leftBodyPnts.push(left)
       rightBodyPnts.push(right)
     }
@@ -132,36 +168,36 @@ class DoubleArrow extends Overlay {
   }
 
   _getTempPoint4(linePnt1, linePnt2, point) {
-    let midPnt = mid(linePnt1, linePnt2)
-    let len = distance(midPnt, point)
-    let angle = getAngleOfThreePoints(linePnt1, midPnt, point)
+    let midPnt = PlotUtil.mid(linePnt1, linePnt2)
+    let len = PlotUtil.distance(midPnt, point)
+    let angle = PlotUtil.getAngleOfThreePoints(linePnt1, midPnt, point)
     let symPnt, distance1, distance2, mid
     if (angle < HALF_PI) {
       distance1 = len * Math.sin(angle)
       distance2 = len * Math.cos(angle)
-      mid = getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, false)
-      symPnt = getThirdPoint(midPnt, mid, HALF_PI, distance2, true)
+      mid = PlotUtil.getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, false)
+      symPnt = PlotUtil.getThirdPoint(midPnt, mid, HALF_PI, distance2, true)
     } else if (angle >= HALF_PI && angle < Math.PI) {
       distance1 = len * Math.sin(Math.PI - angle)
       distance2 = len * Math.cos(Math.PI - angle)
-      mid = getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, false)
-      symPnt = getThirdPoint(midPnt, mid, HALF_PI, distance2, false)
+      mid = PlotUtil.getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, false)
+      symPnt = PlotUtil.getThirdPoint(midPnt, mid, HALF_PI, distance2, false)
     } else if (angle >= Math.PI && angle < Math.PI * 1.5) {
       distance1 = len * Math.sin(angle - Math.PI)
       distance2 = len * Math.cos(angle - Math.PI)
-      mid = getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, true)
-      symPnt = getThirdPoint(midPnt, mid, HALF_PI, distance2, true)
+      mid = PlotUtil.getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, true)
+      symPnt = PlotUtil.getThirdPoint(midPnt, mid, HALF_PI, distance2, true)
     } else {
       distance1 = len * Math.sin(Math.PI * 2 - angle)
       distance2 = len * Math.cos(Math.PI * 2 - angle)
-      mid = getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, true)
-      symPnt = getThirdPoint(midPnt, mid, HALF_PI, distance2, false)
+      mid = PlotUtil.getThirdPoint(linePnt1, midPnt, HALF_PI, distance1, true)
+      symPnt = PlotUtil.getThirdPoint(midPnt, mid, HALF_PI, distance2, false)
     }
     return symPnt
   }
 
   _getHierarchy() {
-    let count = this._positions
+    let count = this._positions.length
     let tempPoint4 = undefined
     let connPoint = undefined
     let pnts = Parse.parsePolygonCoordToArray(this._positions)[0]
@@ -170,10 +206,10 @@ class DoubleArrow extends Overlay {
     let pnt3 = pnts[2]
     if (count === 3) tempPoint4 = this._getTempPoint4(pnt1, pnt2, pnt3)
     else tempPoint4 = pnts[3]
-    if (count === 3 || count === 4) connPoint = mid(pnt1, pnt2)
+    if (count === 3 || count === 4) connPoint = PlotUtil.mid(pnt1, pnt2)
     else connPoint = pnts[4]
     let leftArrowPnts, rightArrowPnts
-    if (isClockWise(pnt1, pnt2, pnt3)) {
+    if (PlotUtil.isClockWise(pnt1, pnt2, pnt3)) {
       leftArrowPnts = this._getArrowPoints(pnt1, connPoint, tempPoint4, false)
       rightArrowPnts = this._getArrowPoints(connPoint, pnt2, pnt3, true)
     } else {
@@ -188,9 +224,11 @@ class DoubleArrow extends Overlay {
     let rlBodyPnts = rightArrowPnts.slice(0, t)
     let rArrowPnts = rightArrowPnts.slice(t, t + 5)
     let rrBodyPnts = rightArrowPnts.slice(t + 5, m)
-    rlBodyPnts = getBezierPoints(rlBodyPnts)
-    let bodyPnts = getBezierPoints(rrBodyPnts.concat(llBodyPnts.slice(1)))
-    lrBodyPnts = getBezierPoints(lrBodyPnts)
+    rlBodyPnts = PlotUtil.getBezierPoints(rlBodyPnts)
+    let bodyPnts = PlotUtil.getBezierPoints(
+      rrBodyPnts.concat(llBodyPnts.slice(1))
+    )
+    lrBodyPnts = PlotUtil.getBezierPoints(lrBodyPnts)
     return new Cesium.PolygonHierarchy(
       Transform.transformWGS84ArrayToCartesianArray(
         Parse.parsePositions(

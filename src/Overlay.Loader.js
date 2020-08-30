@@ -18,7 +18,6 @@ import AttackArrow from './core/plot/AttackArrow'
 import DoubleArrow from './core/plot/DoubleArrow'
 import FineArrow from './core/plot/FineArrow'
 import GatheringPlace from './core/plot/GatheringPlace'
-import StraightArrow from './core/plot/StraightArrow'
 import TailedAttackArrow from './core/plot/TailedAttackArrow'
 
 const overlays = {
@@ -37,7 +36,6 @@ const overlays = {
   DoubleArrow,
   FineArrow,
   GatheringPlace,
-  StraightArrow,
   TailedAttackArrow
 }
 

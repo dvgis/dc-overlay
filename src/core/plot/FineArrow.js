@@ -3,9 +3,7 @@
  * @Date: 2020-08-29 22:38:10
  */
 
-const { Overlay, Util, State, Transform, Parse } = DC
-
-const { getBaseLength, getThirdPoint } = DC.PlotUtil
+const { Overlay, Util, PlotUtil, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -39,16 +37,46 @@ class FineArrow extends Overlay {
     let pnts = Parse.parsePolygonCoordToArray(this._positions)[0]
     let pnt1 = pnts[0]
     let pnt2 = pnts[1]
-    let len = getBaseLength(pnts)
+    let len = PlotUtil.getBaseLength(pnts)
     let tailWidth = len * this.tailWidthFactor
     let neckWidth = len * this.neckWidthFactor
     let headWidth = len * this.headWidthFactor
-    let tailLeft = getThirdPoint(pnt2, pnt1, HALF_PI, tailWidth, true)
-    let tailRight = getThirdPoint(pnt2, pnt1, HALF_PI, tailWidth, false)
-    let headLeft = getThirdPoint(pnt1, pnt2, this.headAngle, headWidth, false)
-    let headRight = getThirdPoint(pnt1, pnt2, this.headAngle, headWidth, true)
-    let neckLeft = getThirdPoint(pnt1, pnt2, this.neckAngle, neckWidth, false)
-    let neckRight = getThirdPoint(pnt1, pnt2, this.neckAngle, neckWidth, true)
+    let tailLeft = PlotUtil.getThirdPoint(pnt2, pnt1, HALF_PI, tailWidth, true)
+    let tailRight = PlotUtil.getThirdPoint(
+      pnt2,
+      pnt1,
+      HALF_PI,
+      tailWidth,
+      false
+    )
+    let headLeft = PlotUtil.getThirdPoint(
+      pnt1,
+      pnt2,
+      this.headAngle,
+      headWidth,
+      false
+    )
+    let headRight = PlotUtil.getThirdPoint(
+      pnt1,
+      pnt2,
+      this.headAngle,
+      headWidth,
+      true
+    )
+    let neckLeft = PlotUtil.getThirdPoint(
+      pnt1,
+      pnt2,
+      this.neckAngle,
+      neckWidth,
+      false
+    )
+    let neckRight = PlotUtil.getThirdPoint(
+      pnt1,
+      pnt2,
+      this.neckAngle,
+      neckWidth,
+      true
+    )
     return new Cesium.PolygonHierarchy(
       Transform.transformWGS84ArrayToCartesianArray(
         Parse.parsePositions([

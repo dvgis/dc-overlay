@@ -3,14 +3,7 @@
  * @Date: 2020-08-29 23:00:27
  */
 
-const { Overlay, Util, State, Transform, Parse } = DC
-
-const {
-  distance,
-  getThirdPoint,
-  getBisectorNormals,
-  getCubicValue
-} = DC.PlotUtil
+const { Overlay, Util, PlotUtil, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -42,8 +35,8 @@ class GatheringPlace extends Overlay {
     let pnts = Parse.parsePolygonCoordToArray(this._positions)[0]
     if (this._positions.length === 2) {
       let mid = DC.PlotUtil.mid(pnts[0], pnts[1])
-      let d = distance(pnts[0], mid) / 0.9
-      let pnt = getThirdPoint(pnts[0], mid, HALF_PI, d, true)
+      let d = PlotUtil.distance(pnts[0], mid) / 0.9
+      let pnt = PlotUtil.getThirdPoint(pnts[0], mid, HALF_PI, d, true)
       pnts = [pnts[0], pnt, pnts[1]]
     }
     let mid = DC.PlotUtil.mid(pnts[0], pnts[2])
@@ -53,7 +46,7 @@ class GatheringPlace extends Overlay {
       let pnt1 = pnts[i]
       let pnt2 = pnts[i + 1]
       let pnt3 = pnts[i + 2]
-      let normalPoints = getBisectorNormals(this.t, pnt1, pnt2, pnt3)
+      let normalPoints = PlotUtil.getBisectorNormals(this.t, pnt1, pnt2, pnt3)
       normals = normals.concat(normalPoints)
     }
     let count = normals.length
@@ -64,7 +57,7 @@ class GatheringPlace extends Overlay {
       let pnt2 = pnts[i + 1]
       pList.push(pnt1)
       for (let t = 0; t <= FITTING_COUNT; t++) {
-        let pnt = getCubicValue(
+        let pnt = PlotUtil.getCubicValue(
           t / FITTING_COUNT,
           pnt1,
           normals[i * 2],
