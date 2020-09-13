@@ -29,12 +29,14 @@ module.exports = env => {
     entry: {
       'dc.overlay': ['entry']
     },
-    devtool: IS_PROD ? false : 'cheap-module-eval-source-map',
+    devtool: IS_PROD ? false : 'source-map',
     output: {
       filename: IS_PROD ? '[name].min.js' : '[name].js',
       path: path.resolve(__dirname, 'dist'),
       publicPath: publicPath,
-      sourcePrefix: ''
+      library: 'DcOverlay',
+      libraryTarget: 'umd',
+      umdNamedDefine: true
     },
     amd: {
       toUrlUndefined: true
