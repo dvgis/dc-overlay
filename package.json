@@ -1,6 +1,6 @@
 {
   "name": "@dvgis/dc-overlay",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "DC-SDK overlay package",
   "main": "index.js",
   "repository": "https://github.com/dvgis/dc-overlay.git",

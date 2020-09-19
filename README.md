@@ -35,9 +35,9 @@
 ```
 
 ```js
-import 'dvgis/dc-sdk/dist/dc.base.min' //Basic Package
-import 'dvgis/dc-sdk/dist/dc.core.min' //Core Package
-import 'dvgis/dc-overlay/dist/dc.core.min' //Overlay Package
+import DC from 'dvgis/dc-sdk/dist/dc.base.min' //Basic Package
+import DcCore from 'dvgis/dc-sdk/dist/dc.core.min' //Core Package
+import DcOverlay from  'dvgis/dc-overlay/dist/dc.overlay.min' //Overlay Package
 import 'dvgis/dc-sdk/dist/dc.core.min.css' // Main Style Sheet
 ```
 
@@ -71,6 +71,8 @@ module.exports = {
 ## Start
 
 ```js
+DC.use(DcCore)
+DC.use(DcOverlay)
 DC.ready(() => {
   let viewer = new DC.Viewer(divId) // divId is the Id attribute value of a div node. If it is not passed in, the 3D scene cannot be initialized
 })
