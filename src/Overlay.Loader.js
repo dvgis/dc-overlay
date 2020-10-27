@@ -19,6 +19,7 @@ import DoubleArrow from './core/plot/DoubleArrow'
 import FineArrow from './core/plot/FineArrow'
 import GatheringPlace from './core/plot/GatheringPlace'
 import TailedAttackArrow from './core/plot/TailedAttackArrow'
+import WaterPrimitive from './core/primitive/WaterPrimitive'
 
 const overlays = {
   Box,
@@ -36,7 +37,8 @@ const overlays = {
   DoubleArrow,
   FineArrow,
   GatheringPlace,
-  TailedAttackArrow
+  TailedAttackArrow,
+  WaterPrimitive
 }
 
 DC.mixin(overlays)
