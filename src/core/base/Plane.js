@@ -8,18 +8,31 @@ const { Overlay, Util, State, Transform, Parse } = DC
 const { Cesium } = DC.Namespace
 
 class Plane extends Overlay {
-  constructor(position, width, height, direction) {
+  constructor(position, width, height, plane = {}) {
     super()
     this._position = Parse.parsePosition(position)
     this._width = +width || 0
     this._height = +height || 0
-    this._plane = new Cesium.Plane(Cesium.Cartesian3.clone(direction), 0.0)
+    if (plane.normal && typeof plane.normal === 'string') {
+      let n = String(plane.normal).toLocaleUpperCase()
+      plane.normal =
+        n === 'X'
+          ? Cesium.Cartesian3.UNIT_X
+          : n === 'Y'
+          ? Cesium.Cartesian3.UNIT_Y
+          : Cesium.Cartesian3.UNIT_Z
+    } else {
+      plane.normal = Cesium.Cartesian3.UNIT_Z
+    }
+    this._normal = plane.normal
+    this._distance = plane.distance || 0
     this._delegate = new Cesium.Entity({
       plane: {
         dimensions: {
           x: this._width,
           y: this._height
-        }
+        },
+        plane: new Cesium.Plane(this._normal, this._distance)
       }
     })
     this.type = Overlay.getOverlayType('plane')
@@ -67,9 +80,23 @@ class Plane extends Overlay {
   }
 
   set direction(direction) {
-    this._plane = new Cesium.Plane(direction, 0.0)
-    this._delegate.plan.plane = new Cesium.Plane(direction, 0.0)
+    this._direction = direction
+    this._delegate.plane.plane.normal = direction
     return this
+  }
+
+  get direction() {
+    return this._direction
+  }
+
+  set distance(distance) {
+    this._distance = distance
+    this._delegate.plane.plane.distance = distance
+    return this
+  }
+
+  get distance() {
+    return this._distance
   }
 
   _mountedHook() {
@@ -81,6 +108,7 @@ class Plane extends Overlay {
      *  initialize the Overlay parameter
      */
     this.direction = this._direction
+    this.distance = this._distance
   }
 
   /**

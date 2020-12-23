@@ -3,7 +3,7 @@
  * @Date: 2020-07-28 18:37:59
  */
 
-const { Position, Overlay, Util, State, Transform, Parse } = DC
+const { Overlay, Util, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
@@ -69,9 +69,10 @@ class CustomLabel extends Overlay {
    * @param style
    * @returns {CustomLabel}
    */
-  setVLine(style) {
+  setVLine(style = {}) {
     if (this._position.alt > 0 && !this._delegate.polyline) {
-      let position = new Position(this._position.lng, this._position.lat, 0)
+      let position = this._position.copy()
+      position.alt = style.height || 0
       this._delegate.polyline = {
         ...style,
         positions: Transform.transformWGS84ArrayToCartesianArray([
@@ -90,19 +91,17 @@ class CustomLabel extends Overlay {
    * @param rotateAmount
    * @returns {CustomLabel}
    */
-  setBottomCircle(radius, style, rotateAmount) {
+  setBottomCircle(radius, style = {}, rotateAmount = 0) {
     let stRotation = 0
-    let amount = rotateAmount || 0
+    let amount = rotateAmount
     this._delegate.ellipse = {
       ...style,
       semiMajorAxis: radius,
       semiMinorAxis: radius,
       stRotation: new Cesium.CallbackProperty(time => {
-        if (amount > 0) {
-          stRotation += amount
-          if (stRotation >= 360) {
-            stRotation = 0
-          }
+        stRotation += amount
+        if (stRotation >= 360 || stRotation <= -360) {
+          stRotation = 0
         }
         return stRotation
       })

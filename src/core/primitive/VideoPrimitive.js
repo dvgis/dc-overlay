@@ -8,16 +8,15 @@ const { Overlay, State, Transform, Parse } = DC
 const { Cesium } = DC.Namespace
 
 class VideoPrimitive extends Overlay {
-  constructor(positions, asynchronous = true) {
+  constructor(positions, video) {
     super()
     this._positions = Parse.parsePositions(positions)
     this._delegate = new Cesium.GroundPrimitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: {}
-      }),
-      asynchronous
+      })
     })
-    this._videoEl = undefined
+    this._video = video
     this.type = Overlay.getOverlayType('video_primitive')
     this._state = State.INITIALIZED
   }
@@ -39,6 +38,16 @@ class VideoPrimitive extends Overlay {
     return this._positions
   }
 
+  set video(video) {
+    this._video = video
+    this._setAppearance()
+    return this
+  }
+
+  get video() {
+    return this._video
+  }
+
   /**
    *
    * @private
@@ -46,7 +55,7 @@ class VideoPrimitive extends Overlay {
   _setAppearance() {
     this._delegate.appearance = new Cesium.EllipsoidSurfaceAppearance({
       material: Cesium.Material.fromType('Image', {
-        image: this._videoEl
+        image: this._video
       })
     })
   }
@@ -56,18 +65,7 @@ class VideoPrimitive extends Overlay {
      *  set the positions
      */
     this.positions = this._positions
-  }
-
-  /**
-   *
-   * @param el
-   * @returns {VideoPrimitive}
-   */
-  setElement(el) {
-    this._videoEl = el
-    this._videoEl.play && this._videoEl.play()
-    this._setAppearance()
-    return this
+    this.video = this._video
   }
 }
 
