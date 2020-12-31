@@ -79,16 +79,6 @@ class Plane extends Overlay {
     return this._height
   }
 
-  set direction(direction) {
-    this._direction = direction
-    this._delegate.plane.plane.normal = direction
-    return this
-  }
-
-  get direction() {
-    return this._direction
-  }
-
   set distance(distance) {
     this._distance = distance
     this._delegate.plane.plane.distance = distance
@@ -107,7 +97,6 @@ class Plane extends Overlay {
     /**
      *  initialize the Overlay parameter
      */
-    this.direction = this._direction
     this.distance = this._distance
   }
 

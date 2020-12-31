@@ -34,12 +34,12 @@ class GatheringPlace extends Overlay {
   _getHierarchy() {
     let pnts = Parse.parsePolygonCoordToArray(this._positions)[0]
     if (this._positions.length === 2) {
-      let mid = DC.PlotUtil.mid(pnts[0], pnts[1])
+      let mid = PlotUtil.mid(pnts[0], pnts[1])
       let d = PlotUtil.distance(pnts[0], mid) / 0.9
       let pnt = PlotUtil.getThirdPoint(pnts[0], mid, HALF_PI, d, true)
       pnts = [pnts[0], pnt, pnts[1]]
     }
-    let mid = DC.PlotUtil.mid(pnts[0], pnts[2])
+    let mid = PlotUtil.mid(pnts[0], pnts[2])
     pnts.push(mid, pnts[0], pnts[1])
     let normals = []
     for (let i = 0; i < pnts.length - 2; i++) {

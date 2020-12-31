@@ -70,6 +70,10 @@ class WaterPrimitive extends Overlay {
      *  set the positions
      */
     this.positions = this._positions
+    /**
+     * set the appearance
+     */
+    !this._delegate.appearance && this._setAppearance()
   }
 
   /**
