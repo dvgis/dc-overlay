@@ -7,7 +7,7 @@ const { Overlay, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
-class LineScanPrimitive extends Overlay {
+class ScanLinePrimitive extends Overlay {
   constructor(position, radius) {
     super()
     this._position = Parse.parsePosition(position)
@@ -18,9 +18,7 @@ class LineScanPrimitive extends Overlay {
       }),
       asynchronous: true
     })
-    this._speed = 10
-    this._color = Cesium.Color.WHITE
-    this.type = Overlay.getOverlayType('line_scan_primitive')
+    this.type = Overlay.getOverlayType('scan_line_primitive')
     this._state = State.INITIALIZED
   }
 
@@ -64,8 +62,8 @@ class LineScanPrimitive extends Overlay {
     }
     this._delegate.appearance = new Cesium.MaterialAppearance({
       material: Cesium.Material.fromType('LineScan', {
-        color: this._color,
-        speed: this._speed
+        color: this._style?.color || Cesium.Color.WHITE,
+        speed: this._style?.speed || 10
       })
     })
   }
@@ -85,7 +83,7 @@ class LineScanPrimitive extends Overlay {
   /**
    * Sets Style
    * @param style
-   * @returns {LineScanPrimitive}
+   * @returns {ScanLinePrimitive}
    */
   setStyle(style = {}) {
     if (Object.keys(style).length === 0) {
@@ -94,13 +92,11 @@ class LineScanPrimitive extends Overlay {
     this._style = style
     style.classificationType &&
       (this._delegate.classificationType = this._style.classificationType)
-    style.color && (this._color = style.color)
-    style.speed && (this._speed = style.speed)
     this._setAppearance()
     return this
   }
 }
 
-Overlay.registerType('line_scan_primitive')
+Overlay.registerType('scan_line_primitive')
 
-export default LineScanPrimitive
+export default ScanLinePrimitive

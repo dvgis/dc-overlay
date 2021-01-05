@@ -21,7 +21,8 @@ import GatheringPlace from './core/plot/GatheringPlace'
 import TailedAttackArrow from './core/plot/TailedAttackArrow'
 import WaterPrimitive from './core/primitive/WaterPrimitive'
 import VideoPrimitive from './core/primitive/VideoPrimitive'
-import LineScanPrimitive from './core/primitive/LineScanPrimitive'
+import ScanLinePrimitive from './core/primitive/ScanLinePrimitive'
+import FlowLinePrimitive from './core/primitive/FlowLinePrimitive'
 
 const overlays = {
   Box,
@@ -42,7 +43,8 @@ const overlays = {
   TailedAttackArrow,
   WaterPrimitive,
   VideoPrimitive,
-  LineScanPrimitive
+  ScanLinePrimitive,
+  FlowLinePrimitive
 }
 
 DC.mixin(overlays)

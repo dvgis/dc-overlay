@@ -7,14 +7,14 @@ const { Overlay, State, Transform, Parse } = DC
 const { Cesium } = DC.Namespace
 
 class WaterPrimitive extends Overlay {
-  constructor(positions, asynchronous = true) {
+  constructor(positions) {
     super()
     this._positions = Parse.parsePositions(positions)
     this._delegate = new Cesium.GroundPrimitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: {}
       }),
-      asynchronous
+      asynchronous: true
     })
     this.type = Overlay.getOverlayType('water_primitive')
     this._state = State.INITIALIZED
