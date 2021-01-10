@@ -7,7 +7,7 @@ const { Overlay, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
-class ScanLinePrimitive extends Overlay {
+class ScanCirclePrimitive extends Overlay {
   constructor(position, radius) {
     super()
     this._position = Parse.parsePosition(position)
@@ -15,10 +15,9 @@ class ScanLinePrimitive extends Overlay {
     this._delegate = new Cesium.GroundPrimitive({
       geometryInstances: new Cesium.GeometryInstance({
         geometry: {}
-      }),
-      asynchronous: true
+      })
     })
-    this.type = Overlay.getOverlayType('scan_line_primitive')
+    this.type = Overlay.getOverlayType('scan_circle_primitive')
     this._state = State.INITIALIZED
   }
 
@@ -29,7 +28,6 @@ class ScanLinePrimitive extends Overlay {
       semiMajorAxis: this._radius,
       semiMinorAxis: this._radius
     })
-
     return this
   }
 
@@ -39,12 +37,8 @@ class ScanLinePrimitive extends Overlay {
 
   set radius(radius) {
     this._radius = radius
-    this._delegate.geometryInstances.geometry = new Cesium.EllipseGeometry({
-      center: Transform.transformWGS84ToCartesian(this._position),
-      semiMajorAxis: this._radius,
-      semiMinorAxis: this._radius
-    })
-
+    this._delegate.geometryInstances.geometry.semiMajorAxis = this._radius
+    this._delegate.geometryInstances.geometry.semiMinorAxis = this._radius
     return this
   }
 
@@ -61,7 +55,7 @@ class ScanLinePrimitive extends Overlay {
       return
     }
     this._delegate.appearance = new Cesium.MaterialAppearance({
-      material: Cesium.Material.fromType('LineScan', {
+      material: Cesium.Material.fromType('CircleScan', {
         color: this._style?.color || Cesium.Color.WHITE,
         speed: this._style?.speed || 10
       })
@@ -83,7 +77,7 @@ class ScanLinePrimitive extends Overlay {
   /**
    * Sets Style
    * @param style
-   * @returns {ScanLinePrimitive}
+   * @returns {ScanCirclePrimitive}
    */
   setStyle(style = {}) {
     if (Object.keys(style).length === 0) {
@@ -97,6 +91,6 @@ class ScanLinePrimitive extends Overlay {
   }
 }
 
-Overlay.registerType('scan_line_primitive')
+Overlay.registerType('scan_circle_primitive')
 
-export default ScanLinePrimitive
+export default ScanCirclePrimitive

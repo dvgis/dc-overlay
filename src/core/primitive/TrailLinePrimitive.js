@@ -1,13 +1,13 @@
 /**
  * @Author: Caven
- * @Date: 2021-01-05 20:18:34
+ * @Date: 2021-01-09 21:33:59
  */
 
 const { Overlay, State, Transform, Parse } = DC
 
 const { Cesium } = DC.Namespace
 
-class FlowLinePrimitive extends Overlay {
+class TrailLinePrimitive extends Overlay {
   constructor(positions, width = 1) {
     super()
     this._positions = Parse.parsePositions(positions)
@@ -17,7 +17,7 @@ class FlowLinePrimitive extends Overlay {
         geometry: {}
       })
     })
-    this.type = Overlay.getOverlayType('flow_line_primitive')
+    this.type = Overlay.getOverlayType('trail_line_primitive')
     this._state = State.INITIALIZED
   }
 
@@ -40,9 +40,9 @@ class FlowLinePrimitive extends Overlay {
    */
   _setAppearance() {
     this._delegate.appearance = new Cesium.PolylineMaterialAppearance({
-      material: Cesium.Material.fromType('PolylineFlow', {
+      material: Cesium.Material.fromType('PolylineTrail', {
         color: this._style?.color || new Cesium.Color(1.0, 0.0, 0.0, 0.7),
-        speed: this._style?.speed || 10
+        speed: this._style?.speed || 5
       })
     })
   }
@@ -61,7 +61,7 @@ class FlowLinePrimitive extends Overlay {
   /**
    * Sets Style
    * @param style
-   * @returns {FlowLinePrimitive}
+   * @returns {TrailLinePrimitive}
    */
   setStyle(style = {}) {
     if (Object.keys(style).length === 0) {
@@ -75,6 +75,6 @@ class FlowLinePrimitive extends Overlay {
   }
 }
 
-Overlay.registerType('flow_line_primitive')
+Overlay.registerType('trail_line_primitive')
 
-export default FlowLinePrimitive
+export default TrailLinePrimitive
