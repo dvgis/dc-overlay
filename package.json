@@ -1,6 +1,6 @@
 {
   "name": "@dvgis/dc-overlay",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "DC-SDK overlay package",
   "main": "index.js",
   "repository": "https://github.com/dvgis/dc-overlay.git",
@@ -44,6 +44,7 @@
     "webpack-obfuscator": "^1.8.0"
   },
   "peerDependencies": {
-    "@dvgis/dc-sdk": ">=1.12.1"
+    "@dvgis/dc-sdk": ">=1.12.1",
+    "@dvgis/dc-plugins": ">=1.9.3"
   }
 }
