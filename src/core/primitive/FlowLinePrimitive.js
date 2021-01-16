@@ -42,7 +42,9 @@ class FlowLinePrimitive extends Overlay {
     this._delegate.appearance = new Cesium.PolylineMaterialAppearance({
       material: Cesium.Material.fromType('PolylineFlow', {
         color: this._style?.color || new Cesium.Color(1.0, 0.0, 0.0, 0.7),
-        speed: this._style?.speed || 10
+        speed: this._style?.speed || 1,
+        percent: this._style?.percent || 0.03,
+        gradient: this._style?.gradient || 0.1
       })
     })
   }
