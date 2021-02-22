@@ -2,6 +2,7 @@
  * @Author: Caven
  * @Date: 2020-01-18 18:22:23
  */
+
 const path = require('path')
 const webpack = require('webpack')
 const packageInfo = require('./package.json')
@@ -13,13 +14,7 @@ function getTime() {
   m = m < 10 ? '0' + m : m
   let d = now.getDate()
   d = d < 10 ? '0' + d : d
-  let h = now.getHours()
-  h = h < 10 ? '0' + h : h
-  let min = now.getMinutes()
-  min = min < 10 ? '0' + min : min
-  let s = now.getSeconds()
-  s = s < 10 ? '0' + s : s
-  return `${now.getFullYear()}-${m}-${d} ${h}:${min}:${s}`
+  return `${now.getFullYear()}-${m}-${d}`
 }
 
 function resolve(dir) {
